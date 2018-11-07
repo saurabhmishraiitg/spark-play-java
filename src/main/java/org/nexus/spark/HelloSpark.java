@@ -1,9 +1,8 @@
 package org.nexus.spark;
 
+import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.SparkSession;
-
-import java.util.List;
 
 public class HelloSpark {
     public static void main(String[] args) {
@@ -14,8 +13,8 @@ public class HelloSpark {
 
         Dataset<String> logData = spark.read().textFile(logFile).cache();
 
-        long numAs = logData.filter(s -> s.contains("INFO")).count();
-        long numBs = logData.filter(s -> s.contains("ERROR")).count();
+        long numAs = logData.filter((FilterFunction<String>) s -> s.contains("INFO")).count();
+        long numBs = logData.filter((FilterFunction<String>) s -> s.contains("ERROR")).count();
 
         System.out.println("Lines with a: " + numAs + ", lines with b: " + numBs);
 
